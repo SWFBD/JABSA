@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">JABSA</string>
+    <string name="tarea_title_label">Title</string>
+    <string name="tarea_title_hint">Enter a title for the task</string>
+    <string name="tarea_details_label">Details</string>
+    <string name="tarea_pick_date">Pick a date</string>
+    <string name="tarea_pick_time">Pick the time</string>
+    <string name="tarea_completed">Completed</string>
+    <string name="tarea_activated">Activate</string>
+    <string name="tarea_person_to_be_called">Person to be called</string>
+    <string name="tarea_call_person">Call Person</string>
+    <string name="tarea_description_hint">Enter a description for the task</string>
+    <string name="tarea_description_label">Description</string>
+    <string name="new_task">New Task</string>
+    <string name="show_subtitle">Show Subtitle</string>
+    <string name="subtitle_format">%1$d crimes</string>
+    <string name="delete_task">Delete task</string>
+    <string name="hide_subtitle">Hide subtitle</string>
+</resources>
