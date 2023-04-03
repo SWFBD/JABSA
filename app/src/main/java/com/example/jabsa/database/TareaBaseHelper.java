@@ -33,6 +33,7 @@ public class TareaBaseHelper extends SQLiteOpenHelper {
                 TareaTable.Cols.COMPLETADO+", "+
                 TareaTable.Cols.LLAMADA_ACTIVADA+", "+
                 TareaTable.Cols.CONTACTO+", "+
+                TareaTable.Cols.IDCATEGORIA+", "+
                 TareaTable.Cols.NUMERO+ ")"
         );
     }

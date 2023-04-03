@@ -29,6 +29,8 @@ public class TareaDbSchema {
             // Número de teléfono del contacto asociado a la tarea
             public static final String NUMERO = "numero";
 
+            //Categoría de la tarea
+            public static final String IDCATEGORIA = "idcategoria";
 
 
         }

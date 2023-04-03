@@ -16,7 +16,16 @@ public class Tarea {
     private String mContacto;
     private String mNumero;
 
-    // Constructor de la clase Tarea
+    private String mIdCategoria;
+
+    public String getmIdCategoria() {
+        return mIdCategoria;
+    }
+
+    public void setmIdCategoria(String mIdCategoria) {
+        this.mIdCategoria = mIdCategoria;
+    }
+
     public Tarea(){
         this(UUID.randomUUID());
     }
