@@ -45,6 +45,7 @@ import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import com.example.jabsa.alarmNotification.Utils;
 import com.example.jabsa.model.Categoria;
 import com.example.jabsa.model.CategoriaLab;
 import com.example.jabsa.model.Tarea;
@@ -99,7 +100,9 @@ public class TareaFragment extends Fragment {
     private CategoryMap mCategoryMap;
     private List<String> mCategoryList;
 
+    public static final String MY_ACTION = "com.example.myapp.MY_ACTION";
 
+    private static final int ALARM_ID = 1;
 
 
 
@@ -246,7 +249,12 @@ public class TareaFragment extends Fragment {
                                                 if(calendarioActual.get(Calendar.MINUTE) <= calendarioSeleccionado.get(Calendar.MINUTE)){
                                                     mHora.setText(String.format(Locale.getDefault(), "%02d:%02d", hour, minute));
                                                     mTarea.setmHora(String.format(Locale.getDefault(), "%02d:%02d", hour, minute));
-                                                    
+                                                    if(!mTarea.getmAlarma_activada()){
+                                                        setAlarm(calendarioSeleccionado);
+                                                    }
+                                                    else{
+                                                        unsetAlarm();
+                                                    }
                                                     updateTarea();
                                                 }
                                                 else{
@@ -257,7 +265,12 @@ public class TareaFragment extends Fragment {
                                             else{
                                                 mHora.setText(String.format(Locale.getDefault(), "%02d:%02d", hour, minute));
                                                 mTarea.setmHora(String.format(Locale.getDefault(), "%02d:%02d", hour, minute));
-
+                                                if(!mTarea.getmAlarma_activada()){
+                                                    setAlarm(calendarioSeleccionado);
+                                                }
+                                                else{
+                                                    unsetAlarm();
+                                                }
                                                 updateTarea();
                                                 return;
                                             }
@@ -282,7 +295,12 @@ public class TareaFragment extends Fragment {
                                else{
                                    mHora.setText(String.format(Locale.getDefault(), "%02d:%02d", hour, minute));
                                    mTarea.setmHora(String.format(Locale.getDefault(), "%02d:%02d", hour, minute));
-
+                                   if(!mTarea.getmAlarma_activada()){
+                                       setAlarm(calendarioSeleccionado);
+                                   }
+                                   else{
+                                       unsetAlarm();
+                                   }
                                    updateTarea();
                                }
                            }
@@ -296,7 +314,12 @@ public class TareaFragment extends Fragment {
                             else{
                                 mHora.setText(String.format(Locale.getDefault(), "%02d:%02d", hour, minute));
                                 mTarea.setmHora(String.format(Locale.getDefault(), "%02d:%02d", hour, minute));
-
+                                if(!mTarea.getmAlarma_activada()){
+                                    setAlarm(calendarioSeleccionado);
+                                }
+                                else{
+                                    unsetAlarm();
+                                }
                                 updateTarea();
                             }
                         }
@@ -716,10 +739,18 @@ public class TareaFragment extends Fragment {
         mCallbacks.onTareaUpdated(mTarea);
     }
 
-    private void setAlarm(){
+    private void setAlarm(Calendar calendar){
+            Intent intent = new Intent();
+            intent.setAction(MY_ACTION);
+            intent.putExtra("tarea", mTarea.getmTitulo());
+            getContext().sendBroadcast(intent);
+        Utils.setAlarm(ALARM_ID, calendar.getTimeInMillis(), getContext());
 
     }
 
+    private void unsetAlarm(){
+        Utils.cancelAlarm(ALARM_ID, getContext());
+    }
     private void updateDate() {
         SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy");
         String fechaFormateada = formatoFecha.format(mTarea.getmFecha());
