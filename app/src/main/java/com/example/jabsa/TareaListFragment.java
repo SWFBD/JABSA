@@ -179,7 +179,7 @@ public class TareaListFragment extends Fragment {
             // Sumar una hora al objeto Calendar para ajustar la hora
             // del telefono a la hora actual
 
-            cal.add(Calendar.HOUR_OF_DAY, 1);
+            //cal.add(Calendar.HOUR_OF_DAY, 1);
 
             // Actualizar la fecha y hora actual
             mFechaActual = cal.getTime();

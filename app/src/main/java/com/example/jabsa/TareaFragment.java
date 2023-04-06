@@ -210,7 +210,7 @@ public class TareaFragment extends Fragment {
                         //se establece el objeto Date al objeto Calendar
                         calendarioActual.setTime(fechaActual);
                         //se suma una hora a la hora del teléfono
-                        calendarioActual.add(Calendar.HOUR_OF_DAY, 1);
+                        //calendarioActual.add(Calendar.HOUR_OF_DAY, 1);
 
                         //La fecha seleccionada esta formada por la establecida más la hora y los minutos
 
@@ -249,11 +249,12 @@ public class TareaFragment extends Fragment {
                                                 if(calendarioActual.get(Calendar.MINUTE) <= calendarioSeleccionado.get(Calendar.MINUTE)){
                                                     mHora.setText(String.format(Locale.getDefault(), "%02d:%02d", hour, minute));
                                                     mTarea.setmHora(String.format(Locale.getDefault(), "%02d:%02d", hour, minute));
-                                                    if(!mTarea.getmAlarma_activada()){
+                                                    if(mTarea.getmAlarma_activada()){
                                                         Log.i("Estado", "Activado");
                                                         setAlarm(calendarioSeleccionado);
                                                     }
                                                     else{
+                                                        Log.i("Estado", "DesActivado");
                                                         unsetAlarm();
                                                     }
                                                     updateTarea();
@@ -266,17 +267,17 @@ public class TareaFragment extends Fragment {
                                             else{
                                                 mHora.setText(String.format(Locale.getDefault(), "%02d:%02d", hour, minute));
                                                 mTarea.setmHora(String.format(Locale.getDefault(), "%02d:%02d", hour, minute));
-                                                if(!mTarea.getmAlarma_activada()){
+                                                if(mTarea.getmAlarma_activada()){
                                                     Log.i("Estado", "Activado");
                                                     setAlarm(calendarioSeleccionado);
                                                 }
                                                 else{
+                                                    Log.i("Estado", "DesActivado");
                                                     unsetAlarm();
                                                 }
                                                 updateTarea();
                                                 return;
                                             }
-
 
                                         }
                                         else{
@@ -297,11 +298,12 @@ public class TareaFragment extends Fragment {
                                else{
                                    mHora.setText(String.format(Locale.getDefault(), "%02d:%02d", hour, minute));
                                    mTarea.setmHora(String.format(Locale.getDefault(), "%02d:%02d", hour, minute));
-                                   if(!mTarea.getmAlarma_activada()){
+                                   if(mTarea.getmAlarma_activada()){
                                        Log.i("Estado", "Activado");
                                        setAlarm(calendarioSeleccionado);
                                    }
                                    else{
+                                       Log.i("Estado", "DesActivado");
                                        unsetAlarm();
                                    }
                                    updateTarea();
@@ -317,11 +319,12 @@ public class TareaFragment extends Fragment {
                             else{
                                 mHora.setText(String.format(Locale.getDefault(), "%02d:%02d", hour, minute));
                                 mTarea.setmHora(String.format(Locale.getDefault(), "%02d:%02d", hour, minute));
-                                if(!mTarea.getmAlarma_activada()){
+                                if(mTarea.getmAlarma_activada()){
                                     Log.i("Estado", "Activado");
                                     setAlarm(calendarioSeleccionado);
                                 }
                                 else{
+                                    Log.i("Estado", "DesActivado");
                                     unsetAlarm();
                                 }
                                 updateTarea();
@@ -749,11 +752,13 @@ public class TareaFragment extends Fragment {
             intent.putExtra("tarea", mTarea.getmTitulo());
             getContext().sendBroadcast(intent);
         Utils.setAlarm(ALARM_ID, calendar.getTimeInMillis(), getContext());
+        Log.i("Estado", "Hola");
 
     }
 
     private void unsetAlarm(){
         Utils.cancelAlarm(ALARM_ID, getContext());
+        Log.i("Estado", "Adios");
     }
     private void updateDate() {
         SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy");
