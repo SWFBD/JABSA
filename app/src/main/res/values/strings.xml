@@ -7,7 +7,7 @@
     <string name="tarea_pick_time">Pick the time</string>
     <string name="tarea_completed">Completed</string>
     <string name="tarea_activated">Activate</string>
-    <string name="tarea_person_to_be_called">Person to be called</string>
+    <string name="tarea_person_to_be_called">Person to call</string>
     <string name="tarea_call_person">Call Person</string>
     <string name="tarea_description_hint">Enter a description for the task</string>
     <string name="tarea_description_label">Description</string>
@@ -16,4 +16,9 @@
     <string name="subtitle_format">%1$d crimes</string>
     <string name="delete_task">Delete task</string>
     <string name="hide_subtitle">Hide subtitle</string>
+    <string name="categoria_titulo">Category: </string>
+    <string name="categoria_inicial">Select a category:</string>
+    <string name="categoria_añadir">Add category</string>
+    <string name="categoria_borrar">Delete category</string>
+    <string name="activar_alarma">Set Alarm</string>
 </resources>

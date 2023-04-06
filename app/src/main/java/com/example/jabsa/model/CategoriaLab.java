@@ -7,9 +7,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.example.jabsa.database.CategoriaBaseHelper;
 import com.example.jabsa.database.CategoriaCursorWrapper;
-import com.example.jabsa.database.CategoriaDbSchema;
 import com.example.jabsa.database.TareaBaseHelper;
 
 import java.util.ArrayList;
@@ -32,7 +30,7 @@ public class CategoriaLab {
 
     private CategoriaLab(Context context){
         mContext = context.getApplicationContext();
-        mDatabase = new CategoriaBaseHelper(mContext).getWritableDatabase();
+        mDatabase = new TareaBaseHelper(mContext).getWritableDatabase();
     }
 
     public List<Categoria> getCategorias(){

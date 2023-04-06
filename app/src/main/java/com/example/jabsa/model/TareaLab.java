@@ -123,6 +123,7 @@ public class TareaLab {
         values.put(TareaTable.Cols.CONTACTO, tarea.getmContacto());
         values.put(TareaTable.Cols.NUMERO, tarea.getmNumero());
         values.put(TareaTable.Cols.IDCATEGORIA, tarea.getmIdCategoria());
+        values.put(TareaTable.Cols.ALARMA_ACTIVADA, tarea.getmAlarma_activada()?1:0);
         return values;
     }
 

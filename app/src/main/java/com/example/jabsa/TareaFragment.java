@@ -26,12 +26,15 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -42,12 +45,15 @@ import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import com.example.jabsa.model.Categoria;
+import com.example.jabsa.model.CategoriaLab;
 import com.example.jabsa.model.Tarea;
 import com.example.jabsa.model.TareaLab;
 
 import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -73,17 +79,28 @@ public class TareaFragment extends Fragment {
     private Button mHora;
     private CheckBox mCompletado;
     private CheckBox mLlamada_activada;
+
+    private CheckBox mAlarma_activada;
     private Button mContacto;
     private Button mNumero;
     private File mPhotoFile;
     private ImageButton mPhotoButton;
     private ImageView mPhotoView;
     private Callbacks mCallbacks;
-
     private int hour;
     private int minute;
-
     private String mPersonId;
+    private Spinner mListaDesplegable;
+    private Button mBotonAñadir;
+    private Button mBotonEliminar;
+
+    private CategoriaLab mCategoriaLab;
+    private List<Categoria> mCategorias;
+    private CategoryMap mCategoryMap;
+    private List<String> mCategoryList;
+
+
+
 
 
     public interface Callbacks{
@@ -194,7 +211,6 @@ public class TareaFragment extends Fragment {
 
                         //La fecha seleccionada esta formada por la establecida más la hora y los minutos
 
-
                         //Fecha seleccionada
                         Date fechaSeleccionada = new Date();
                         //objeto de la clase calendar
@@ -206,6 +222,7 @@ public class TareaFragment extends Fragment {
                         //Se establece la hora seleccionada y los minutos a la fecha comparativa
                         calendarioSeleccionado.set(Calendar.MINUTE, minute);
                         calendarioSeleccionado.set(Calendar.HOUR_OF_DAY, hour);
+
 
                         //Si se ha establecido una fecha
                         if(mTarea.getmFecha() != null){
@@ -229,6 +246,7 @@ public class TareaFragment extends Fragment {
                                                 if(calendarioActual.get(Calendar.MINUTE) <= calendarioSeleccionado.get(Calendar.MINUTE)){
                                                     mHora.setText(String.format(Locale.getDefault(), "%02d:%02d", hour, minute));
                                                     mTarea.setmHora(String.format(Locale.getDefault(), "%02d:%02d", hour, minute));
+                                                    
                                                     updateTarea();
                                                 }
                                                 else{
@@ -239,6 +257,7 @@ public class TareaFragment extends Fragment {
                                             else{
                                                 mHora.setText(String.format(Locale.getDefault(), "%02d:%02d", hour, minute));
                                                 mTarea.setmHora(String.format(Locale.getDefault(), "%02d:%02d", hour, minute));
+
                                                 updateTarea();
                                                 return;
                                             }
@@ -263,6 +282,7 @@ public class TareaFragment extends Fragment {
                                else{
                                    mHora.setText(String.format(Locale.getDefault(), "%02d:%02d", hour, minute));
                                    mTarea.setmHora(String.format(Locale.getDefault(), "%02d:%02d", hour, minute));
+
                                    updateTarea();
                                }
                            }
@@ -276,16 +296,12 @@ public class TareaFragment extends Fragment {
                             else{
                                 mHora.setText(String.format(Locale.getDefault(), "%02d:%02d", hour, minute));
                                 mTarea.setmHora(String.format(Locale.getDefault(), "%02d:%02d", hour, minute));
+
                                 updateTarea();
                             }
                         }
 
-
-                        /*  mHora.setText(String.format(Locale.getDefault(), "%02d:%02d", hour, minute));
-                        mTarea.setmHora(String.format(Locale.getDefault(), "%02d:%02d", hour, minute));
-                        updateTarea();*/
-                        //  Toast.makeText(getActivity(), "Selecciona una hora y minutos posterior al actual", Toast.LENGTH_SHORT).show();
-                    }
+                }
                 };
                 TimePickerDialog timePickerDialog = new TimePickerDialog(getActivity(), onTimeSetListener, hour, minute, true);
                 timePickerDialog.setTitle("Select time");
@@ -310,6 +326,128 @@ public class TareaFragment extends Fragment {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 mTarea.setmLlamada_activada(isChecked);
                 updateTarea();
+            }
+        });
+
+        mAlarma_activada = (CheckBox) view.findViewById(R.id.set_alarm);
+        mAlarma_activada.setChecked(mTarea.getmAlarma_activada());
+        mAlarma_activada.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                mTarea.setmAlarma_activada(isChecked);
+                updateTarea();
+            }
+        });
+
+        mListaDesplegable = view.findViewById(R.id.category_spinner);
+
+        mCategoryList = updateCategoryName();
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, mCategoryList);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mListaDesplegable.setAdapter(adapter);
+
+        String categoriaSeleccionada = mCategoryMap.getCategoryName(mTarea.getmIdCategoria());
+        //Obtener el indice de la categoria dentro del spinnerAdapter
+        int categoriaIndex = ((ArrayAdapter<String>) mListaDesplegable.getAdapter()).getPosition(categoriaSeleccionada);
+        //Establecer la seleccion del spinner al indice de la categoria
+        mListaDesplegable.setSelection(categoriaIndex);
+
+        mListaDesplegable.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                    // Establecer la categoria seleccionada como la propia de la tarea
+                    String categoriaSeleccionada = (String) parent.getItemAtPosition(position);
+                    String codigoCategoria = mCategoryMap.getCategoryCode(categoriaSeleccionada);
+                    mTarea.setmIdCategoria(codigoCategoria);
+                    updateTarea();
+                    Log.i("Guarda", ""+categoriaSeleccionada+" "+codigoCategoria);
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                //  No se ha seleccionado nada
+            }
+        });
+
+        mBotonAñadir = view.findViewById(R.id.add_category_button);
+        mBotonAñadir.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setTitle("New Category");
+
+                final EditText input = new EditText(getActivity());
+                builder.setView(input);
+
+                builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String newCategory = input.getText().toString();
+                        Categoria categoria = new Categoria();
+                        categoria.setmNombre(newCategory);
+                        mCategoriaLab.addCategoria(categoria);
+                        mCategoryList = updateCategoryName();
+
+                        ArrayAdapter<String> adapter = (ArrayAdapter<String>) mListaDesplegable.getAdapter();
+                        adapter.clear();
+                        adapter.addAll(mCategoryList);
+                        adapter.notifyDataSetChanged();
+                    }
+                });
+
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+
+                builder.show();
+            }
+        });
+
+        mBotonEliminar = view.findViewById(R.id.delete_category_button);
+        mBotonEliminar.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setTitle("Delete category");
+                //mCategoryList = updateCategoryName();
+
+                builder.setItems(mCategoryList.toArray(new String[0]), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        int position = which;
+                        String categoryToDelete = mCategoryList.get(position);
+                        String categoryToDeleteId = mCategoryMap.getCategoryCode(categoryToDelete);
+                        for(Categoria categoria : mCategorias){
+                            if(categoria.getmId().toString().equals(categoryToDeleteId)){
+                                mCategoriaLab.deleteCategoria(categoria);
+                            }
+                        }
+                        mCategoryList = updateCategoryName();
+                        ArrayAdapter<String> adapter = (ArrayAdapter<String>) mListaDesplegable.getAdapter();
+                        adapter.clear();
+                        adapter.addAll(mCategoryList);
+                        adapter.notifyDataSetChanged();
+
+                    }
+                });
+
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+                builder.show();
             }
         });
 
@@ -372,6 +510,22 @@ public class TareaFragment extends Fragment {
 
         return view;
 
+    }
+
+    private List<String> updateCategoryName(){
+        mCategoriaLab = CategoriaLab.get(getActivity());
+        mCategorias = mCategoriaLab.getCategorias();
+
+        List<String> categoryList = new ArrayList<>();
+        List<String> categoryListId = new ArrayList<>();
+
+        for(Categoria categoria : mCategorias){
+            categoryList.add(categoria.getmNombre());
+            categoryListId.add(categoria.getmId().toString());
+        }
+
+        mCategoryMap = new CategoryMap(categoryListId, categoryList);
+        return categoryList;
     }
 
     @Override
@@ -560,6 +714,10 @@ public class TareaFragment extends Fragment {
     private void updateTarea() {
         TareaLab.get(getActivity()).updateTarea(mTarea);
         mCallbacks.onTareaUpdated(mTarea);
+    }
+
+    private void setAlarm(){
+
     }
 
     private void updateDate() {

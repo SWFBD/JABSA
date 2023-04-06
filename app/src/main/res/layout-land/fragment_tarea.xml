@@ -52,6 +52,12 @@
         android:layout_height="25dp"
         android:layout_marginBottom="5dp"
         android:text="@string/tarea_activated"/>
+    <CheckBox
+        android:id="@+id/set_alarm"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="25dp"
+        android:text="@string/activar_alarma"/>
 
 </LinearLayout>
 

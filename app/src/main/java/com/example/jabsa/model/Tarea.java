@@ -18,6 +18,17 @@ public class Tarea {
 
     private String mIdCategoria;
 
+    private boolean mAlarma_activada;
+
+    public boolean getmAlarma_activada() {
+        return mAlarma_activada;
+    }
+
+    public void setmAlarma_activada(boolean mAlarma_activada) {
+        this.mAlarma_activada = mAlarma_activada;
+    }
+
+
     public String getmIdCategoria() {
         return mIdCategoria;
     }

@@ -34,7 +34,15 @@ public class TareaBaseHelper extends SQLiteOpenHelper {
                 TareaTable.Cols.LLAMADA_ACTIVADA+", "+
                 TareaTable.Cols.CONTACTO+", "+
                 TareaTable.Cols.IDCATEGORIA+", "+
+                TareaTable.Cols.ALARMA_ACTIVADA+", "+
                 TareaTable.Cols.NUMERO+ ")"
+        );
+
+        db.execSQL(
+                "create table "+ CategoriaDbSchema.CategoriaTable.NAME + "(" +
+                        "_id integer primary key autoincrement, "+
+                        CategoriaDbSchema.CategoriaTable.Cols.UUID+", "+
+                        CategoriaDbSchema.CategoriaTable.Cols.NOMBRE+")"
         );
     }
     // Método que se llama al actualizar la base de datos

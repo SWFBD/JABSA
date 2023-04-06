@@ -33,13 +33,17 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 // Este fragment representa una lista de tareas que se mostrará en una RecyclerView
 public class TareaListFragment extends Fragment {
     private RecyclerView mTareaRecyclerView;
     private TareaAdapter mAdapter;
     private boolean mSubtitleVisible;
+
+
 
     private Callbacks mCallbacks;
 
@@ -108,23 +112,16 @@ public class TareaListFragment extends Fragment {
         TareaLab tareaLab = TareaLab.get(getActivity());
         List<Tarea> tareas = tareaLab.getTareas();
 
-        CategoriaLab categoriaLab = CategoriaLab.get(getActivity());
-        List<Categoria> categorias = categoriaLab.getCategorias();
-
         if(mAdapter == null){
-            mAdapter = new TareaAdapter(tareas, categorias);
+            //Crear el nuevo adaptador con el hashmap mConjuntoDatos
+            mAdapter = new TareaAdapter(tareas);
             mTareaRecyclerView.setAdapter(mAdapter);
         }
         else{
-            mAdapter.setmTareas(tareas);
-            mAdapter.setmCategorias(categorias);
-
+            mAdapter.setConjuntoDatos(tareas);
             mAdapter.notifyDataSetChanged();
         }
-
         updateSubtitle();
-
-
     }
     private class TareaHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
@@ -132,7 +129,7 @@ public class TareaListFragment extends Fragment {
         private TextView mDateTextView;
         private ImageView mTaskStateIconView;
 
-
+        private TextView mNameCategory;
 
         private Tarea mTarea;
 
@@ -142,12 +139,24 @@ public class TareaListFragment extends Fragment {
             mTitleTextView = (TextView) itemView.findViewById(R.id.task_title);
             mDateTextView = (TextView) itemView.findViewById(R.id.date_task);
             mTaskStateIconView = (ImageView) itemView.findViewById(R.id.task_solved);
+            mNameCategory = (TextView) itemView.findViewById(R.id.task_category);
 
         }
 
         public void bind(Tarea tarea){
+
             // Asignar la tarea a la variable mTarea
             mTarea = tarea;
+
+            CategoriaLab categoriaLab = CategoriaLab.get(getActivity());
+            List<Categoria> categorias = categoriaLab.getCategorias();
+
+            for(Categoria categoria : categorias){
+                if(mTarea.getmIdCategoria().equals(categoria.getmId().toString())){
+                    mNameCategory.setText(categoria.getmNombre());
+                }
+            }
+
             // Establecer el título de la tarea en el TextView correspondiente
             mTitleTextView.setText(mTarea.getmTitulo());
             // Crear un objeto SimpleDateFormat con el formato de fecha deseado
@@ -237,117 +246,59 @@ public class TareaListFragment extends Fragment {
         @Override
         public void onClick(View v) {
             Intent intent = TareaPagerActivity.newIntent(getActivity(), mTarea.getmId());
+            Log.i("GuardaCategoria", mTarea.getmIdCategoria());
             startActivity(intent);
         }
     }
     private class TareaAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
-        private List<Object> mListaFusionada;
         private List<Tarea> mTareas;
-        private List<Categoria> mCategorias;
 
-        private final int TYPE_CATEGORY = 0;
-        private final int TYPE_TASK = 1;
-
-        public TareaAdapter(List<Tarea> tareas, List<Categoria> categorias){
-
+        public TareaAdapter(List<Tarea> tareas) {
             mTareas = tareas;
-            mCategorias = categorias;
-
-            mListaFusionada = new ArrayList<>();
-
-            mListaFusionada.addAll(mTareas);
-            mListaFusionada.addAll(mCategorias);
-        }
+       }
 
         @Override
         public int getItemCount() {
-            return mListaFusionada.size();
+            return mTareas.size();
         }
 
-        @Override
-        public int getItemViewType(int position) {
-
-            Object item = mListaFusionada.get(position);
-
-            if(item instanceof Categoria){
-                return TYPE_CATEGORY;
-            } else if(item instanceof  Tarea){
-                return TYPE_TASK;
-            }
-            return super.getItemViewType(position);
-        }
 
         @NonNull
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-
-            if(viewType == TYPE_TASK) {
-                LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
+              LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
                 return new TareaHolder(layoutInflater, parent);
-            }
-            else{
-                LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
-                return new CategoriaHolder(layoutInflater, parent);
-            }
         }
-
 
 
         @Override
         public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-
-            Object item = mListaFusionada.get(position);
-
-            if(item instanceof Categoria){
-                Categoria categoria = (Categoria) item;
-                CategoriaHolder categoriaHolder = (CategoriaHolder) holder;
-                categoriaHolder.bind(categoria);
-
-                //  Recorre la lista fusionada a partir de la posición actual
-                for(int i = position + 1; i < mListaFusionada.size(); i++){
-                    Object nexItem = mListaFusionada.get(i);
-                    if(nexItem instanceof  Tarea){
-                        Tarea tarea = (Tarea) nexItem;
-                        if(tarea.getmIdCategoria().equals(categoria.getmId())){
-                            TareaHolder tareaHolder = (TareaHolder) holder;
-                            tareaHolder.bind(tarea);
-                        } else{
-                            // Si el siguiente elemento ya no es una tarea que comparte la misma categoría, salimos del bucle
-                            break;
-                        }
-                    } else{
-                        // Si el siguiente elemento no es una tarea, salimos del bucle
-                        break;
-                    }
-                }
-            } else if(item instanceof  Tarea){
-                Tarea tarea = (Tarea) item;
-                TareaHolder tareaHolder = (TareaHolder) holder;
-                tareaHolder.bind(tarea);
-            }
-
+            // Ordenar la lista de objetos por fecha ascendente
+            Collections.sort(mTareas, ordenaTareas);
+            Tarea tarea = mTareas.get(position);
+            TareaHolder tareaHolder = (TareaHolder) holder;
+            tareaHolder.bind(tarea);
         }
 
 
         // Define el comparador personalizado
-        Comparator<Tarea> comparaFechas = new Comparator<Tarea>() {
+        Comparator<Tarea> ordenaTareas = new Comparator<Tarea>() {
             @Override
             public int compare(Tarea o1, Tarea o2) {
+                int compareCategoria = o1.getmIdCategoria().compareTo(o2.getmIdCategoria());
+                if(compareCategoria != 0){
+                    return compareCategoria;
+                }
                 return o1.getmFecha().compareTo(o2.getmFecha());
             }
         };
 
-
-        public void setmTareas(List<Tarea> tareas) {
+        public void setConjuntoDatos(List<Tarea> tareas){
             mTareas = tareas;
-        }
-        public void setmCategorias(List<Categoria> categorias){
-            mCategorias = categorias;
         }
 
     }
-
 
 
     @Override

@@ -36,6 +36,7 @@ public class TareaCursorWrapper extends CursorWrapper {
         String contacto = getString(getColumnIndex(TareaTable.Cols.CONTACTO));
         String numero = getString(getColumnIndex(TareaTable.Cols.NUMERO));
         String idcategoria = getString(getColumnIndex(TareaTable.Cols.IDCATEGORIA));
+        int esAlarma_activada = getInt(getColumnIndex(TareaTable.Cols.ALARMA_ACTIVADA));
 
         // Creamos una nueva instancia de Tarea a partir del UUID
 
@@ -52,6 +53,8 @@ public class TareaCursorWrapper extends CursorWrapper {
         tarea.setmContacto(contacto);
         tarea.setmNumero(numero);
         tarea.setmIdCategoria(idcategoria);
+        tarea.setmAlarma_activada(esAlarma_activada != 0);
+
 
         // Devolvemos la tarea creada
         return tarea;

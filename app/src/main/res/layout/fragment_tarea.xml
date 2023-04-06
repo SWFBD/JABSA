@@ -11,9 +11,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/tarea_details_label"/>
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:layout_marginBottom="5dp"
+    >
+
     <Button
         android:id="@+id/tarea_date"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
+        android:layout_weight="1"
         android:layout_height="wrap_content"
         android:background="@drawable/boton_redondeado"
         android:layout_marginBottom="10dp"
@@ -21,32 +30,102 @@
         />
     <Button
         android:id="@+id/tarea_time"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
+        android:layout_weight="1"
         android:layout_height="wrap_content"
         android:background="@drawable/boton_redondeado"
         android:text="@string/tarea_pick_time"
         />
-    <CheckBox
-        android:id="@+id/tarea_completed"
+</LinearLayout>
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/tarea_completed"/>
-    <CheckBox
-        android:id="@+id/tarea_activated"
+        android:orientation="horizontal"
+        >
+        <CheckBox
+            android:id="@+id/tarea_completed"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="@string/tarea_completed"/>
+        <CheckBox
+            android:id="@+id/tarea_activated"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="@string/tarea_activated"/>
+        <CheckBox
+            android:id="@+id/set_alarm"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="@string/activar_alarma"/>
+    </LinearLayout>
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/categoria_titulo"
+        />
+    <Spinner
+        android:id="@+id/category_spinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/tarea_activated"/>
+        android:layout_marginBottom="5dp"
+        android:prompt="@string/categoria_inicial"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="5dp"
+        >
+
+        <Button
+            android:id="@+id/add_category_button"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:background="@drawable/boton_redondeado"
+            android:text="@string/categoria_añadir"
+            />
+        <Button
+            android:id="@+id/delete_category_button"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:background="@drawable/boton_redondeado"
+            android:text="@string/categoria_borrar"
+            />
+
+    </LinearLayout>
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:layout_marginBottom="5dp"
+
+    >
     <Button
         android:id="@+id/tarea_person"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
+        android:layout_weight="1"
         android:layout_height="wrap_content"
         android:background="@drawable/boton_redondeado"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="5dp"
         android:text="@string/tarea_person_to_be_called"/>
     <Button
         android:id="@+id/tarea_call"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
+        android:layout_weight="1"
         android:layout_height="wrap_content"
         android:background="@drawable/boton_redondeado"
         android:text="@string/tarea_call_person"/>
+
+</LinearLayout>
+
 </LinearLayout>
