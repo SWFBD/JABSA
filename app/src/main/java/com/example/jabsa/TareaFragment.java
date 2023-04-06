@@ -250,6 +250,7 @@ public class TareaFragment extends Fragment {
                                                     mHora.setText(String.format(Locale.getDefault(), "%02d:%02d", hour, minute));
                                                     mTarea.setmHora(String.format(Locale.getDefault(), "%02d:%02d", hour, minute));
                                                     if(!mTarea.getmAlarma_activada()){
+                                                        Log.i("Estado", "Activado");
                                                         setAlarm(calendarioSeleccionado);
                                                     }
                                                     else{
@@ -266,6 +267,7 @@ public class TareaFragment extends Fragment {
                                                 mHora.setText(String.format(Locale.getDefault(), "%02d:%02d", hour, minute));
                                                 mTarea.setmHora(String.format(Locale.getDefault(), "%02d:%02d", hour, minute));
                                                 if(!mTarea.getmAlarma_activada()){
+                                                    Log.i("Estado", "Activado");
                                                     setAlarm(calendarioSeleccionado);
                                                 }
                                                 else{
@@ -296,6 +298,7 @@ public class TareaFragment extends Fragment {
                                    mHora.setText(String.format(Locale.getDefault(), "%02d:%02d", hour, minute));
                                    mTarea.setmHora(String.format(Locale.getDefault(), "%02d:%02d", hour, minute));
                                    if(!mTarea.getmAlarma_activada()){
+                                       Log.i("Estado", "Activado");
                                        setAlarm(calendarioSeleccionado);
                                    }
                                    else{
@@ -315,6 +318,7 @@ public class TareaFragment extends Fragment {
                                 mHora.setText(String.format(Locale.getDefault(), "%02d:%02d", hour, minute));
                                 mTarea.setmHora(String.format(Locale.getDefault(), "%02d:%02d", hour, minute));
                                 if(!mTarea.getmAlarma_activada()){
+                                    Log.i("Estado", "Activado");
                                     setAlarm(calendarioSeleccionado);
                                 }
                                 else{

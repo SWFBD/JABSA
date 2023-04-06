@@ -68,7 +68,7 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
             </intent-filter>
         </receiver>
-        <receiver android:name="com.example.jabsa.alarmNotification.NotificationService$MyBroadcastReceiver"
+        <receiver android:name=".alarmNotification.MyBroadcastReceiver"
             android:exported="true"
             tools:ignore="Instantiatable">
             <intent-filter>

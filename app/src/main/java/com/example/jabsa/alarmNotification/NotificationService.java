@@ -30,7 +30,7 @@ public class NotificationService extends IntentService {
     private static int NOTIFICATION_ID = 1;
     Notification notification;
 
-    private String mMensaje;
+    public static String mMensaje;
 
     public NotificationService(String name) {
         super(name);
@@ -100,13 +100,6 @@ public class NotificationService extends IntentService {
             notificationManager.notify(NOTIFICATION_ID, notification);
         }
     }
-    public class MyBroadcastReceiver extends BroadcastReceiver {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (intent.getAction().equals(MY_ACTION)) {
-                mMensaje = intent.getStringExtra("tarea");
-            }
-        }
-    }
+
 
 }
