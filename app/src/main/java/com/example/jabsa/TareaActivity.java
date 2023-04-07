@@ -18,9 +18,4 @@ public class TareaActivity extends SingleFragmentActivity{
         return TareaFragment.newInstance(tareaId);
     }
 
-/*    public static Intent newIntent(Context packageContext, UUID tareaId){
-        Intent intent = new Intent(packageContext, TareaActivity.class);
-        intent.putExtra(EXTRA_TAREA_ID, tareaId);
-        return intent;
-    }*/
 }
