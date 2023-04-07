@@ -140,7 +140,6 @@ public class TareaListFragment extends Fragment {
             mDateTextView = (TextView) itemView.findViewById(R.id.date_task);
             mTaskStateIconView = (ImageView) itemView.findViewById(R.id.task_solved);
             mNameCategory = (TextView) itemView.findViewById(R.id.task_category);
-
         }
 
         public void bind(Tarea tarea){

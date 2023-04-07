@@ -37,6 +37,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginRight="16dp"
+            android:maxLines="1"
             android:hint="@string/tarea_title_hint"/>
         <TextView
             style="?android:listSeparatorTextViewStyle"
@@ -48,6 +49,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginRight="16dp"
+            android:maxLines="3"
             android:hint="@string/tarea_description_hint"/>
 
     </LinearLayout>
