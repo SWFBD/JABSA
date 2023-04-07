@@ -19,7 +19,7 @@
         android:id="@+id/tarea_date"
         android:layout_width="0dp"
         android:layout_weight="1"
-        android:layout_height="wrap_content"
+        android:layout_height="35dp"
         android:background="@drawable/boton_redondeado"
         android:layout_marginBottom="10dp"
         android:text="@string/tarea_pick_date"
@@ -28,7 +28,7 @@
         android:id="@+id/tarea_time"
         android:layout_width="0dp"
         android:layout_weight="1"
-        android:layout_height="wrap_content"
+        android:layout_height="35dp"
         android:background="@drawable/boton_redondeado"
         android:text="@string/tarea_pick_time"
         />
@@ -95,7 +95,7 @@
             android:id="@+id/add_category_button"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:layout_height="wrap_content"
+            android:layout_height="35dp"
             android:background="@drawable/boton_redondeado"
             android:text="@string/categoria_añadir"
             />
@@ -103,7 +103,7 @@
             android:id="@+id/delete_category_button"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:layout_height="wrap_content"
+            android:layout_height="35dp"
             android:background="@drawable/boton_redondeado"
             android:text="@string/categoria_borrar"
             />
@@ -121,7 +121,7 @@
         android:id="@+id/tarea_person"
         android:layout_width="0dp"
         android:layout_weight="1"
-        android:layout_height="wrap_content"
+        android:layout_height="35dp"
         android:background="@drawable/boton_redondeado"
         android:layout_marginBottom="5dp"
         android:text="@string/tarea_person_to_be_called"/>
@@ -129,7 +129,7 @@
         android:id="@+id/tarea_call"
         android:layout_width="0dp"
         android:layout_weight="1"
-        android:layout_height="wrap_content"
+        android:layout_height="35dp"
         android:background="@drawable/boton_redondeado"
         android:text="@string/tarea_call_person"/>
 

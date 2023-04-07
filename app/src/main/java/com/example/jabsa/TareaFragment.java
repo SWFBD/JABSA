@@ -418,15 +418,27 @@ public class TareaFragment extends Fragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         String newCategory = input.getText().toString();
-                        Categoria categoria = new Categoria();
-                        categoria.setmNombre(newCategory);
-                        mCategoriaLab.addCategoria(categoria);
-                        mCategoryList = updateCategoryName();
+                        boolean bandera = false;
 
-                        ArrayAdapter<String> adapter = (ArrayAdapter<String>) mListaDesplegable.getAdapter();
-                        adapter.clear();
-                        adapter.addAll(mCategoryList);
-                        adapter.notifyDataSetChanged();
+                        for(String categoria : mCategoryList){
+                            if(newCategory.equalsIgnoreCase(categoria)){
+                                bandera = true;
+                            }
+                        }
+                        if(bandera == false){
+                            Categoria categoria = new Categoria();
+                            categoria.setmNombre(newCategory);
+                            mCategoriaLab.addCategoria(categoria);
+                            mCategoryList = updateCategoryName();
+
+                            ArrayAdapter<String> adapter = (ArrayAdapter<String>) mListaDesplegable.getAdapter();
+                            adapter.clear();
+                            adapter.addAll(mCategoryList);
+                            adapter.notifyDataSetChanged();
+                        }
+                        else{
+                            Toast.makeText(getContext(), "Has introducido una categoria repetida", Toast.LENGTH_LONG).show();
+                        }
                     }
                 });
 
