@@ -73,9 +73,6 @@ public class TareaListFragment extends Fragment {
                 TareaLab.get(getActivity()).addTarea(tarea);
                 Intent intent = TareaPagerActivity.newIntent(getActivity(), tarea.getmId());
                 startActivity(intent);
-/*                updateUI();
-/*
-                mCallbacks.onTareaSelected(tarea);*/
                 return true;
             }
             // Si se selecciona "Mostrar subtítulo", se cambia el estado de visibilidad del subtítulo y se actualiza el menú
@@ -108,10 +105,12 @@ public class TareaListFragment extends Fragment {
         return view;
     }
 
+
     public void updateUI() {
 
         TareaLab tareaLab = TareaLab.get(getActivity());
         List<Tarea> tareas = tareaLab.getTareas();
+
 
         if(mAdapter == null){
             //Crear el nuevo adaptador con el hashmap mConjuntoDatos
@@ -145,16 +144,16 @@ public class TareaListFragment extends Fragment {
 
         public void bind(Tarea tarea){
 
+            Log.i("bind ejecucion", "1");
             // Asignar la tarea a la variable mTarea
             mTarea = tarea;
 
             CategoriaLab categoriaLab = CategoriaLab.get(getActivity());
             List<Categoria> categorias = categoriaLab.getCategorias();
 
-            Log.i("categoria nombre", ""+categorias.get(0).getmNombre());
-            Log.i("categoria codigo", ""+categorias.get(0).getmId());
-            Log.i("tarea codigo categoria", ""+mTarea.getmIdCategoria());
-
+                    Log.i("bind idcat", ""+categorias.get(0).getmId().toString());
+                    Log.i("bind idcattarea", ""+mTarea.getmIdCategoria());
+                     Log.i("bind catnombre", ""+categorias.get(0).getmNombre());
 
             for(Categoria categoria : categorias){
                 if(mTarea.getmIdCategoria().equals(categoria.getmId().toString())){
@@ -251,7 +250,6 @@ public class TareaListFragment extends Fragment {
         @Override
         public void onClick(View v) {
             Intent intent = TareaPagerActivity.newIntent(getActivity(), mTarea.getmId());
-            Log.i("GuardaCategoria", mTarea.getmIdCategoria());
             startActivity(intent);
         }
     }

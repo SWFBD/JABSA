@@ -60,17 +60,13 @@ import java.io.File;
 import java.io.FileDescriptor;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.TimeZone;
 import java.util.UUID;
-
-import kotlin.jvm.internal.PackageReference;
 
 public class TareaFragment extends Fragment {
     private static final String ARG_TAREA_ID = "tarea_id";
@@ -401,21 +397,16 @@ public class TareaFragment extends Fragment {
         mListaDesplegable.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-                    // Establecer la categoria seleccionada como la propia de la tarea
-                    String categoriaSeleccionada = (String) parent.getItemAtPosition(position);
-                    String codigoCategoria = mCategoryMap.getCategoryCode(categoriaSeleccionada);
-                    mTarea.setmIdCategoria(codigoCategoria);
-                    updateTarea();
-                    Log.i("Guarda", ""+categoriaSeleccionada+" "+codigoCategoria);
-
+                insertSelectedItem(parent, position);
             }
+
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                //  No se ha seleccionado nada
+                updateTarea();
             }
         });
+
 
         mBotonAñadir = view.findViewById(R.id.add_category_button);
         mBotonAñadir.setOnClickListener(new View.OnClickListener() {
@@ -450,6 +441,7 @@ public class TareaFragment extends Fragment {
                             adapter.clear();
                             adapter.addAll(mCategoryList);
                             adapter.notifyDataSetChanged();
+                            updateTarea();
                         }
                         else{
                             Toast.makeText(getContext(), "Has introducido una categoria repetida", Toast.LENGTH_LONG).show();
@@ -494,7 +486,7 @@ public class TareaFragment extends Fragment {
                         adapter.clear();
                         adapter.addAll(mCategoryList);
                         adapter.notifyDataSetChanged();
-
+                        updateTarea();
                     }
                 });
 
@@ -599,7 +591,19 @@ public class TareaFragment extends Fragment {
         return view;
 
     }
-
+    private void insertSelectedItem(AdapterView<?> parent, int position){
+        // Establecer la categoria seleccionada como la propia de la tarea
+        String categoriaSeleccionada = (String) parent.getItemAtPosition(position);
+        //String codigoCategoria = mCategoryMap.getCategoryCode(categoriaSeleccionada);
+        for(Categoria categoria : mCategorias){
+            if(categoria.getmNombre().equals(categoriaSeleccionada)){
+                Log.i("bind nombreCat", categoria.getmNombre());
+                mTarea.setmIdCategoria(categoria.getmId().toString());
+            }
+        }
+        //mTarea.setmIdCategoria(codigoCategoria);
+        updateTarea();
+    }
     private void checkStoragePermission(){
 
         if(ContextCompat.checkSelfPermission(getActivity(), READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(getActivity(), WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
@@ -618,7 +622,6 @@ public class TareaFragment extends Fragment {
             categoryList.add(categoria.getmNombre());
             categoryListId.add(categoria.getmId().toString());
         }
-
         mCategoryMap = new CategoryMap(categoryListId, categoryList);
         return categoryList;
     }
