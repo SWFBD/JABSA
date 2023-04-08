@@ -1,6 +1,8 @@
 package com.example.jabsa;
 
 import static android.Manifest.permission.READ_CONTACTS;
+import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
+import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -15,6 +17,8 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.os.ParcelFileDescriptor;
 import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.text.Editable;
@@ -40,6 +44,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
@@ -52,6 +57,9 @@ import com.example.jabsa.model.Tarea;
 import com.example.jabsa.model.TareaLab;
 
 import java.io.File;
+import java.io.FileDescriptor;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -62,6 +70,8 @@ import java.util.Locale;
 import java.util.TimeZone;
 import java.util.UUID;
 
+import kotlin.jvm.internal.PackageReference;
+
 public class TareaFragment extends Fragment {
     private static final String ARG_TAREA_ID = "tarea_id";
     private static final String DIALOG_DATE = "DialogDate";
@@ -69,9 +79,12 @@ public class TareaFragment extends Fragment {
     private static final int REQUEST_CONTACT = 1;
 
     private static final int REQUEST_PHOTO = 2;
+
+    private static final int REQUEST_READ_PERMISSIONS = 3;
     private static final String[] CONTACTS_PERMISSIONS = {
             READ_CONTACTS
     };
+    private static final int REQUEST_PERMISSIONS = 4;
     private static final int REQUEST_CONTACTS_PERMISSIONS = 1;
     private Tarea mTarea;
     private EditText mTitulo;
@@ -103,6 +116,8 @@ public class TareaFragment extends Fragment {
     public static final String MY_ACTION = "com.example.myapp.MY_ACTION";
 
     private static final int ALARM_ID = 1;
+
+    private Uri mUri;
 
 
 
@@ -524,28 +539,59 @@ public class TareaFragment extends Fragment {
         }
         PackageManager packageManager = getActivity().getPackageManager();
         mPhotoButton = (ImageButton) view.findViewById(R.id.tarea_camera);
+
+        // Crear un intent para seleccionar un archivo
+        final Intent pickFile = new Intent(Intent.ACTION_GET_CONTENT);
+        pickFile.setType("image/*");
+
+        // Crear un intent para capturar una imagen
         final Intent captureImage = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        boolean canTakePhoto = mPhotoFile != null &&
-                captureImage.resolveActivity(packageManager) != null;
+
+        // Crear un intent chooser para permitir la selección de varios tipos de archivos
+        Intent chooserIntent = Intent.createChooser(pickFile, "Select Image");
+
+
+        // Agregar el intent de captura de imagen al chooser
+        //chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[]{ captureImage });
+
+        // Verificar si la app tiene una actividad para capturar imágenes o seleccionar imágenes
+        boolean canTakePhoto = mPhotoFile != null && (captureImage.resolveActivity(packageManager) != null || pickFile.resolveActivity(packageManager) != null);
+        checkStoragePermission();
+
+       if(Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())){
+            //final Intent storageIntent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
+            chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[]{
+                captureImage
+            });
+        }
+
         mPhotoButton.setEnabled(canTakePhoto);
         mPhotoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Uri uri = FileProvider.getUriForFile(getActivity(),
-                        "com.example.jabsa.fileprovider",
-                        mPhotoFile);
-                captureImage.putExtra(MediaStore.EXTRA_OUTPUT, uri);
 
-                List<ResolveInfo> cameraActivities = getActivity()
-                        .getPackageManager().queryIntentActivities(captureImage,
-                                PackageManager.MATCH_DEFAULT_ONLY);
-                for(ResolveInfo activity : cameraActivities){
-                    getActivity().grantUriPermission(activity.activityInfo.packageName,
-                            uri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                if (canTakePhoto) {
+                    mUri = FileProvider.getUriForFile(getActivity(), "com.example.jabsa.fileprovider", mPhotoFile);
+                    if (captureImage.resolveActivity(packageManager) != null) {
+                        // Configurar el intent de captura de imagen para guardar la imagen en el archivo
+                        captureImage.putExtra(MediaStore.EXTRA_OUTPUT, mUri);
+                        List<ResolveInfo> cameraActivities = getActivity().getPackageManager().queryIntentActivities(captureImage, PackageManager.MATCH_DEFAULT_ONLY);
+                        for (ResolveInfo activity : cameraActivities) {
+                            getActivity().grantUriPermission(activity.activityInfo.packageName, mUri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                        }
+                    } else {
+                        // No hay una app de cámara, por lo que simplemente abrir el explorador de archivos
+                        startActivityForResult(Intent.createChooser(pickFile, "Select Image"), REQUEST_PHOTO);
+                    }
+                    // Iniciar el chooser para permitir la selección de imagen/cámara
+                    startActivityForResult(chooserIntent, REQUEST_PHOTO);
+                } else {
+                    Toast.makeText(getActivity(), "No hay aplicación de cámara o galeria disponible", Toast.LENGTH_LONG).show();
                 }
-                startActivityForResult(captureImage, REQUEST_PHOTO);
+
             }
         });
+
 
         mPhotoView = (ImageView) view.findViewById(R.id.tarea_photo);
         updatePhotoView();
@@ -554,6 +600,13 @@ public class TareaFragment extends Fragment {
 
     }
 
+    private void checkStoragePermission(){
+
+        if(ContextCompat.checkSelfPermission(getActivity(), READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(getActivity(), WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
+
+            ActivityCompat.requestPermissions(getActivity(), new String[]{READ_EXTERNAL_STORAGE, WRITE_EXTERNAL_STORAGE}, REQUEST_PERMISSIONS);
+        }
+    }
     private List<String> updateCategoryName(){
         mCategoriaLab = CategoriaLab.get(getActivity());
         mCategorias = mCategoriaLab.getCategorias();
@@ -614,10 +667,30 @@ public class TareaFragment extends Fragment {
                 requestPermissions(CONTACTS_PERMISSIONS, REQUEST_CONTACTS_PERMISSIONS);
             }
         }else if(requestCode == REQUEST_PHOTO){
-            Uri uri = FileProvider.getUriForFile(getActivity(),
+/*            Uri uri = FileProvider.getUriForFile(getActivity(),
                     "com.example.jabsa.fileprovider",
                     mPhotoFile);
-            getActivity().revokeUriPermission(uri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+            getActivity().revokeUriPermission(uri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);*/
+            mUri = data.getData();
+            try{
+                ParcelFileDescriptor pfd = getActivity().getContentResolver().openFileDescriptor(mUri, "r");
+                FileDescriptor fd = pfd.getFileDescriptor();
+                FileInputStream inputStream = new FileInputStream(fd);
+                FileOutputStream outputStream = new FileOutputStream(mPhotoFile);
+
+                byte[] buffer = new byte[1024];
+                int length;
+
+                while((length = inputStream.read(buffer)) > 0){
+                    outputStream.write(buffer, 0, length);
+                }
+
+                outputStream.close();
+                inputStream.close();
+            }
+            catch (Exception e){
+
+            }
             updateTarea();
             updatePhotoView();
         }

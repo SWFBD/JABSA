@@ -6,6 +6,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.example.jabsa.database.CategoriaCursorWrapper;
 import com.example.jabsa.database.TareaBaseHelper;
@@ -51,6 +52,7 @@ public class CategoriaLab {
         if(categorias.isEmpty()){
             Categoria sinCategoria = new Categoria();
             sinCategoria.setmNombre("Sin categoria");
+            Log.i("categoria", sinCategoria.getmNombre());
             categorias.add(sinCategoria);
         }
 

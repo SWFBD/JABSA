@@ -73,7 +73,8 @@ public class TareaListFragment extends Fragment {
                 TareaLab.get(getActivity()).addTarea(tarea);
                 Intent intent = TareaPagerActivity.newIntent(getActivity(), tarea.getmId());
                 startActivity(intent);
-/*                updateUI();ss
+/*                updateUI();
+/*
                 mCallbacks.onTareaSelected(tarea);*/
                 return true;
             }
@@ -149,6 +150,11 @@ public class TareaListFragment extends Fragment {
 
             CategoriaLab categoriaLab = CategoriaLab.get(getActivity());
             List<Categoria> categorias = categoriaLab.getCategorias();
+
+            Log.i("categoria nombre", ""+categorias.get(0).getmNombre());
+            Log.i("categoria codigo", ""+categorias.get(0).getmId());
+            Log.i("tarea codigo categoria", ""+mTarea.getmIdCategoria());
+
 
             for(Categoria categoria : categorias){
                 if(mTarea.getmIdCategoria().equals(categoria.getmId().toString())){
