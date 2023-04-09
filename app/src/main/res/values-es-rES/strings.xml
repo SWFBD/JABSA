@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">JABSA</string>
+    <string name="tarea_title_label">Titulo</string>
+    <string name="tarea_title_hint">Introduce un título para la tarea</string>
+    <string name="tarea_details_label">Detalles</string>
+    <string name="tarea_pick_date">Selecciona una fecha</string>
+    <string name="tarea_pick_time">Hora</string>
+    <string name="tarea_completed">Completado</string>
+    <string name="tarea_activated">Activar</string>
+    <string name="tarea_person_to_be_called">Persona a llamar</string>
+    <string name="tarea_call_person">Llamar</string>
+    <string name="tarea_description_hint">Introduce una descripción para la tarea</string>
+    <string name="tarea_description_label">Descripción</string>
+    <string name="new_task">Nueva tarea</string>
+    <string name="show_subtitle">Muestra subtítulo</string>
+    <string name="subtitle_format">%1$d tareas</string>
+    <string name="delete_task">Borrar tarea</string>
+    <string name="hide_subtitle">Ocultar subtítulo</string>
+    <string name="categoria_titulo">Categoría: </string>
+    <string name="categoria_inicial">Selecciona una categoría:</string>
+    <string name="categoria_añadir">Añadir categoría</string>
+    <string name="categoria_borrar">Borrar categoría</string>
+    <string name="activar_alarma">Establecer alarma</string>
+    <string name="comenzar_jabsa">Haz clic aquí para empezar añadiendo una tarea!</string>
+    <string name="bienvenida_jabsa">Bienvenido a JABSA!</string>
+</resources>

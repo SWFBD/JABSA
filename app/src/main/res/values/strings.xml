@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">JABSA</string>
     <string name="tarea_title_label">Title</string>
@@ -21,4 +22,6 @@
     <string name="categoria_añadir">Add category</string>
     <string name="categoria_borrar">Delete category</string>
     <string name="activar_alarma">Set Alarm</string>
+    <string name="comenzar_jabsa">Click here to start adding a task!</string>
+    <string name="bienvenida_jabsa">Welcome to JABSA!</string>
 </resources>
