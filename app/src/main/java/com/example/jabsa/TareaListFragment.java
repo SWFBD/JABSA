@@ -144,16 +144,11 @@ public class TareaListFragment extends Fragment {
 
         public void bind(Tarea tarea){
 
-            Log.i("bind ejecucion", "1");
             // Asignar la tarea a la variable mTarea
             mTarea = tarea;
 
             CategoriaLab categoriaLab = CategoriaLab.get(getActivity());
             List<Categoria> categorias = categoriaLab.getCategorias();
-
-                    Log.i("bind idcat", ""+categorias.get(0).getmId().toString());
-                    Log.i("bind idcattarea", ""+mTarea.getmIdCategoria());
-                     Log.i("bind catnombre", ""+categorias.get(0).getmNombre());
 
             for(Categoria categoria : categorias){
                 if(mTarea.getmIdCategoria().equals(categoria.getmId().toString())){

@@ -2,6 +2,7 @@ package com.example.jabsa.model;
 
 import static com.example.jabsa.database.CategoriaDbSchema.*;
 
+import android.app.Application;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -36,7 +37,7 @@ public class CategoriaLab {
 
     public List<Categoria> getCategorias(){
         List<Categoria> categorias = new ArrayList<>();
-
+        boolean bandera = false;
         CategoriaCursorWrapper cursor = queryCategorias(null, null);
 
         try{
@@ -48,14 +49,23 @@ public class CategoriaLab {
         }finally {
             cursor.close();
         }
-
-        if(categorias.isEmpty()){
+        /*
+        * No se almacena la categoria creada en la base de datos
+        * por eso cada vez que se instancia no está y se agrega con un id
+        * distinto
+        *
+        *  */
+        for(Categoria categoria : categorias){
+            if(categoria.getmNombre().equals("Sin categoria")){
+                bandera = true;
+            }
+        }
+        if(bandera == false){
             Categoria sinCategoria = new Categoria();
             sinCategoria.setmNombre("Sin categoria");
-            Log.i("categoria", sinCategoria.getmNombre());
             categorias.add(sinCategoria);
+            addCategoria(sinCategoria);
         }
-
         return categorias;
     }
 

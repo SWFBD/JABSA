@@ -389,6 +389,7 @@ public class TareaFragment extends Fragment {
         mListaDesplegable.setAdapter(adapter);
 
         String categoriaSeleccionada = mCategoryMap.getCategoryName(mTarea.getmIdCategoria());
+        Log.i("categoria borrada", mTarea.getmIdCategoria()+" "+categoriaSeleccionada);
         //Obtener el indice de la categoria dentro del spinnerAdapter
         int categoriaIndex = ((ArrayAdapter<String>) mListaDesplegable.getAdapter()).getPosition(categoriaSeleccionada);
         //Establecer la seleccion del spinner al indice de la categoria
@@ -441,6 +442,7 @@ public class TareaFragment extends Fragment {
                             adapter.clear();
                             adapter.addAll(mCategoryList);
                             adapter.notifyDataSetChanged();
+                            mTarea.setmIdCategoria(categoria.getmId().toString());
                             updateTarea();
                         }
                         else{
@@ -476,11 +478,44 @@ public class TareaFragment extends Fragment {
                         int position = which;
                         String categoryToDelete = mCategoryList.get(position);
                         String categoryToDeleteId = mCategoryMap.getCategoryCode(categoryToDelete);
-                        for(Categoria categoria : mCategorias){
-                            if(categoria.getmId().toString().equals(categoryToDeleteId)){
-                                mCategoriaLab.deleteCategoria(categoria);
+                        boolean presente = false;
+
+/*                        TareaLab tareaLab = TareaLab.get(getActivity());
+                        List<Tarea> tareas = tareaLab.getTareas();
+
+                        for(Tarea tarea : tareas){
+                            for(Categoria categoria : mCategorias){
+                                if(categoria.getmId().toString().equals(categoryToDeleteId)){
+                                    if(categoria.getmNombre().equals("Sin categoria")){
+                                        Toast.makeText(getActivity(),"Debe estar la categoria 'Sin categoria'", Toast.LENGTH_SHORT).show();
+                                    }
+                                    else{
+                                        if(tarea.getmIdCategoria().equals(categoria.getmId().toString())){
+                                            presente = true;
+                                        }
+                                        else{
+                                            mCategoriaLab.deleteCategoria(categoria);
+                                        }
+                                    }
+                                }
                             }
                         }
+                        if(presente == true){
+                            Toast.makeText(getActivity(), "La categoria que quieres borrar está asignada a alguna tarea", Toast.LENGTH_LONG).show();
+                        }*/
+
+
+                        for(Categoria categoria : mCategorias){
+                            if(categoria.getmId().toString().equals(categoryToDeleteId)){
+                                if(categoria.getmNombre().equals("Sin categoria")){
+                                    Toast.makeText(getActivity(),"Debe estar la categoria 'Sin categoria'", Toast.LENGTH_SHORT).show();
+                                }
+                                else{
+                                    mCategoriaLab.deleteCategoria(categoria);
+                                }
+                            }
+                        }
+
                         mCategoryList = updateCategoryName();
                         ArrayAdapter<String> adapter = (ArrayAdapter<String>) mListaDesplegable.getAdapter();
                         adapter.clear();
@@ -591,17 +626,16 @@ public class TareaFragment extends Fragment {
         return view;
 
     }
+
     private void insertSelectedItem(AdapterView<?> parent, int position){
         // Establecer la categoria seleccionada como la propia de la tarea
         String categoriaSeleccionada = (String) parent.getItemAtPosition(position);
         //String codigoCategoria = mCategoryMap.getCategoryCode(categoriaSeleccionada);
         for(Categoria categoria : mCategorias){
             if(categoria.getmNombre().equals(categoriaSeleccionada)){
-                Log.i("bind nombreCat", categoria.getmNombre());
-                mTarea.setmIdCategoria(categoria.getmId().toString());
+                   mTarea.setmIdCategoria(categoria.getmId().toString());
             }
         }
-        //mTarea.setmIdCategoria(codigoCategoria);
         updateTarea();
     }
     private void checkStoragePermission(){
@@ -670,10 +704,6 @@ public class TareaFragment extends Fragment {
                 requestPermissions(CONTACTS_PERMISSIONS, REQUEST_CONTACTS_PERMISSIONS);
             }
         }else if(requestCode == REQUEST_PHOTO){
-/*            Uri uri = FileProvider.getUriForFile(getActivity(),
-                    "com.example.jabsa.fileprovider",
-                    mPhotoFile);
-            getActivity().revokeUriPermission(uri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);*/
             mUri = data.getData();
             try{
                 ParcelFileDescriptor pfd = getActivity().getContentResolver().openFileDescriptor(mUri, "r");
