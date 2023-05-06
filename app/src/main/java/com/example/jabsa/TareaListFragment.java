@@ -153,6 +153,7 @@ public class TareaListFragment extends Fragment {
             for(Categoria categoria : categorias){
                 if(mTarea.getmIdCategoria().equals(categoria.getmId().toString())){
                     mNameCategory.setText(categoria.getmNombre());
+                        Log.i("NombreCategoria", categoria.getmNombre());
                 }
             }
 

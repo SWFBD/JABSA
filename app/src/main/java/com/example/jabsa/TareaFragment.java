@@ -480,41 +480,31 @@ public class TareaFragment extends Fragment {
                         String categoryToDeleteId = mCategoryMap.getCategoryCode(categoryToDelete);
                         boolean presente = false;
 
-/*                        TareaLab tareaLab = TareaLab.get(getActivity());
+                        TareaLab tareaLab = TareaLab.get(getActivity());
                         List<Tarea> tareas = tareaLab.getTareas();
 
                         for(Tarea tarea : tareas){
+                            if(tarea.getmIdCategoria().equals(categoryToDeleteId)){
+                                presente = true;
+                            }
+                        }
+
+                        if(presente == true){
+                            Toast.makeText(getActivity(), "No se puede borrar una categoria que este asignada a una tarea", Toast.LENGTH_LONG).show();
+                        }
+                        else{
                             for(Categoria categoria : mCategorias){
                                 if(categoria.getmId().toString().equals(categoryToDeleteId)){
                                     if(categoria.getmNombre().equals("Sin categoria")){
                                         Toast.makeText(getActivity(),"Debe estar la categoria 'Sin categoria'", Toast.LENGTH_SHORT).show();
                                     }
                                     else{
-                                        if(tarea.getmIdCategoria().equals(categoria.getmId().toString())){
-                                            presente = true;
-                                        }
-                                        else{
-                                            mCategoriaLab.deleteCategoria(categoria);
-                                        }
+                                        mCategoriaLab.deleteCategoria(categoria);
                                     }
                                 }
                             }
                         }
-                        if(presente == true){
-                            Toast.makeText(getActivity(), "La categoria que quieres borrar está asignada a alguna tarea", Toast.LENGTH_LONG).show();
-                        }*/
 
-
-                        for(Categoria categoria : mCategorias){
-                            if(categoria.getmId().toString().equals(categoryToDeleteId)){
-                                if(categoria.getmNombre().equals("Sin categoria")){
-                                    Toast.makeText(getActivity(),"Debe estar la categoria 'Sin categoria'", Toast.LENGTH_SHORT).show();
-                                }
-                                else{
-                                    mCategoriaLab.deleteCategoria(categoria);
-                                }
-                            }
-                        }
 
                         mCategoryList = updateCategoryName();
                         ArrayAdapter<String> adapter = (ArrayAdapter<String>) mListaDesplegable.getAdapter();
