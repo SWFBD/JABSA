@@ -13,7 +13,9 @@ public class MyBroadcastReceiver extends BroadcastReceiver {
     }
     @Override
     public void onReceive(Context context, Intent intent) {
+        // Verificar si la acción del intent coincide con la acción personalizada
         if (intent.getAction().equals(MY_ACTION)) {
+            // Obtener el mensaje de tarea extraído del intent y asignarlo a la variable mMensaje de NotificationService
             NotificationService.mMensaje = intent.getStringExtra("tarea");
         }
     }

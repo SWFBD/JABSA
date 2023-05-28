@@ -43,6 +43,7 @@ public class NotificationService extends IntentService {
     @TargetApi(Build.VERSION_CODES.O)
     @Override
     protected void onHandleIntent(Intent intent2) {
+        // Obtener el ID del canal de notificación de los recursos
         String NOTIFICATION_CHANNEL_ID = getApplicationContext().getString(R.string.app_name);
         Context context = this.getApplicationContext();
         notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -52,9 +53,9 @@ public class NotificationService extends IntentService {
 
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            final int NOTIFY_ID = 0; // ID of notification
-            String id = NOTIFICATION_CHANNEL_ID; // default_channel_id
-            String title = NOTIFICATION_CHANNEL_ID; // Default Channel
+            final int NOTIFY_ID = 0; // ID de la notificación
+            String id = NOTIFICATION_CHANNEL_ID; // ID del canal predeterminado
+            String title = NOTIFICATION_CHANNEL_ID; // Nombre del canal predeterminado
             PendingIntent pendingIntent;
             NotificationCompat.Builder builder;
             NotificationManager notifManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -73,7 +74,7 @@ public class NotificationService extends IntentService {
             mIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
             pendingIntent = PendingIntent.getActivity(context, 0, mIntent, PendingIntent.FLAG_UPDATE_CURRENT);
             builder.setContentTitle(getString(R.string.app_name)).setCategory(Notification.CATEGORY_SERVICE)
-                    .setSmallIcon(R.drawable.ic_notificacion)   // required
+                    .setSmallIcon(R.drawable.ic_notificacion)   // Requerido
                     .setContentText(mMensaje)
                     .setLargeIcon(BitmapFactory.decodeResource(res, R.drawable.ic_notificacion))
                     .setDefaults(Notification.DEFAULT_ALL)

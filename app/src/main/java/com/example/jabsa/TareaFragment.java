@@ -866,7 +866,6 @@ public class TareaFragment extends Fragment {
 
     private void unsetAlarm(){
         Utils.cancelAlarm(ALARM_ID, getContext());
-        Log.i("Estado", "Adios");
     }
     private void updateDate() {
         SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy");

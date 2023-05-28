@@ -49,12 +49,7 @@ public class CategoriaLab {
         }finally {
             cursor.close();
         }
-        /*
-        * No se almacena la categoria creada en la base de datos
-        * por eso cada vez que se instancia no está y se agrega con un id
-        * distinto
-        *
-        *  */
+
         for(Categoria categoria : categorias){
             if(categoria.getmNombre().equals("Sin categoria")){
                 bandera = true;

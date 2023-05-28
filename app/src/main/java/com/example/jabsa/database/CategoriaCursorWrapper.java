@@ -10,21 +10,19 @@ import com.example.jabsa.model.Categoria;
 import java.util.UUID;
 
 public class CategoriaCursorWrapper extends CursorWrapper {
-    /**
-     * Creates a cursor wrapper.
-     *
-     * @param cursor The underlying cursor to wrap.
-     */
+
     public CategoriaCursorWrapper(Cursor cursor) {
         super(cursor);
     }
 
     public Categoria getCategoria(){
+        // Obtener los valores de las columnas del cursor
         String uuidString = getString(getColumnIndex(CategoriaTable.Cols.UUID));
         String nombre = getString(getColumnIndex(CategoriaTable.Cols.NOMBRE));
 
+        // Crear una nueva instancia de la clase Categoria utilizando el UUID extraído del cursor
         Categoria categoria = new Categoria(UUID.fromString(uuidString));
-
+        // Establecer el nombre de la categoría utilizando el valor extraído del cursor
         categoria.setmNombre(nombre);
 
         return categoria;

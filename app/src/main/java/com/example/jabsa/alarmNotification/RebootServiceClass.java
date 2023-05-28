@@ -10,11 +10,7 @@ import com.example.jabsa.R;
 
 public class RebootServiceClass extends IntentService {
 
-    /**
-     * Creates an IntentService.  Invoked by your subclass's constructor.
-     *
-     * @param name Used to name the worker thread, important only for debugging.
-     */
+
     public RebootServiceClass(String name) {
         super(name);
         startForeground(1, new Notification());
